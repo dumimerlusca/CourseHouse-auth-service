@@ -1,6 +1,5 @@
 import request from "supertest";
 import { app } from "../../app";
-import { prisma } from "../../prismaClient";
 
 const makeRequest = () => request(app).post("/login");
 
@@ -11,7 +10,7 @@ it("should throw error if user does not exists", async () => {
 });
 
 it("should throw error if passwords doesn't match", async () => {
-  const email = "dumi@test.com";
+  const email = "dumiasdasdasdagsdfsasddsfwt4@test.com";
 
   await request(app)
     .post("/register")
@@ -23,7 +22,7 @@ it("should throw error if passwords doesn't match", async () => {
 });
 
 it("should login the user successfully", async () => {
-  const email = "dumi@test.com";
+  const email = "dumiegefqsdfaeghrh34easd@test.com";
   const password = "123456";
 
   await request(app)

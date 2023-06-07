@@ -1,31 +1,32 @@
 import request from "supertest";
 import { app } from "../../app";
-import { prisma } from "../../prismaClient";
+import { UsersRepository } from "../../repositories/users.repository";
 
 const makeRequest = () => request(app).post("/register");
 
 it("should register a user successfully", async () => {
-  const email = "dumi@test.com";
+  const email = "dumiasdadsad@test.com";
 
   // A token should be present in the response
   const { body } = await makeRequest()
-    .send({ email: email, password: "123456", name: "Dumi" })
+    .send({
+      email: email,
+      password: "123456",
+      name: "TEST",
+    })
     .expect(201);
 
   expect(body).toHaveProperty("token");
 
   // Checking to see if the user is saved to the database
-  const createdUser = await prisma.user.findFirst({ where: { email } });
-
+  const createdUser = await UsersRepository.findByEmail(email);
   expect(createdUser).not.toBeNull();
 });
 
 it("should throw an error if user already exists", async () => {
   const email = "test@test.com";
 
-  await prisma.user.create({
-    data: { email: email, name: "Some name", password: "123456" },
-  });
+  await UsersRepository.insert({ email, name: "someName", password: "123456" });
 
   return makeRequest().send({ email, password: "1234563" }).expect(400);
 });

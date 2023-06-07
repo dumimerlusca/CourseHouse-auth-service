@@ -1,5 +1,5 @@
+import { authenticationRequired } from "@dumiorg/coursehouse-common";
 import { Request, Router } from "express";
-import { authenticationRequired } from "../middleware/authentication";
 
 const router = Router();
 

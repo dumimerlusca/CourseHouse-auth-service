@@ -1,11 +1,12 @@
-import express from "express";
-import cors from "cors";
+import { config } from "dotenv";
+config();
 
-import { json } from "express";
-import { errorMiddleware } from "./middleware/error";
+import { errorMiddleware } from "@dumiorg/coursehouse-common";
+import cors from "cors";
+import express, { json } from "express";
+import { currentUserRouter } from "./routes/current-user";
 import { loginRouter } from "./routes/login";
 import { registerRouter } from "./routes/register";
-import { currentUserRouter } from "./routes/current-user";
 
 const app = express();
 

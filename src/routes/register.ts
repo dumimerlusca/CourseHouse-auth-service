@@ -1,11 +1,10 @@
-import { Router } from "express";
-import { checkValidation } from "../middleware/validation-result";
-import { body } from "express-validator";
-import { prisma } from "../prismaClient";
-import asyncHandler from "express-async-handler";
-import jwt from "jsonwebtoken";
-import { HttpException } from "../errors/HttpException";
+import { HttpException, checkValidation } from "@dumiorg/coursehouse-common";
 import bcrypt from "bcrypt";
+import { Router } from "express";
+import asyncHandler from "express-async-handler";
+import { body } from "express-validator";
+import jwt from "jsonwebtoken";
+import { UsersRepository } from "../repositories/users.repository";
 
 const router = Router();
 
@@ -18,9 +17,7 @@ router.post(
   asyncHandler(async (req, res) => {
     const { email, password, name } = req.body;
 
-    const existingUser = await prisma.user.findFirst({
-      where: { email },
-    });
+    const existingUser = await UsersRepository.findByEmail(email);
 
     if (existingUser) {
       throw new HttpException(400, "User already exists");
@@ -29,14 +26,16 @@ router.post(
     const salt = bcrypt.genSaltSync();
     const hashedPassword = bcrypt.hashSync(password, salt);
 
-    const user = await prisma.user.create({
-      data: { email, password: hashedPassword, name },
+    const user = await UsersRepository.insert({
+      email,
+      password: hashedPassword,
+      name,
     });
 
     const token = jwt.sign(
       { id: user.id, email: user.email, name: user.name },
       process.env.JWT_SECRET!,
-      { expiresIn: "1h" }
+      { expiresIn: process.env.JWT_EXPIRATION_TIME }
     );
 
     res.status(201).send({ token });

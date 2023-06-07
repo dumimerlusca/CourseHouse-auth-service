@@ -1,9 +1,26 @@
-import { app } from "../app";
-import { prisma } from "../prismaClient";
+import fs from "fs";
+import path from "path";
 import request from "supertest";
+import { app } from "../app";
+import { client } from "../db/client";
+import { UsersRepository } from "../repositories/users.repository";
 
-afterEach(async () => {
-  await prisma.user.deleteMany({});
+beforeAll(async () => {
+  // I need to connect to the database here in order to perform inserts/reads inside the test cases
+  await client.connect();
+  await UsersRepository.deleteAll();
+  const sql = fs.readFileSync(
+    path.join(__dirname, "../migrations/init-users-db.sql"),
+    "utf-8"
+  );
+  try {
+    // Initialize database tables if necessary, if the tables are created it will throw an error
+    await client.query(sql);
+  } catch (error) {}
+});
+
+afterAll(async () => {
+  await UsersRepository.deleteAll();
 });
 
 declare global {

@@ -1,3 +1,1 @@
-import { User } from "@prisma/client";
-
-export type UserType = Omit<User, "password">;
+export type UserType = any;

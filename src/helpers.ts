@@ -1,5 +1,3 @@
-import { User } from "@prisma/client";
-
-export const createTokenPayload = ({ id, email, isAdmin, name }: User) => {
+export const createTokenPayload = ({ id, email, isAdmin, name }: any) => {
   return { id, email, isAdmin, name };
 };

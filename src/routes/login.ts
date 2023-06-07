@@ -1,12 +1,11 @@
-import { Router } from "express";
-import { checkValidation } from "../middleware/validation-result";
-import { body } from "express-validator";
-import { prisma } from "../prismaClient";
-import asyncHandler from "express-async-handler";
-import { HttpException } from "../errors/HttpException";
+import { HttpException, checkValidation } from "@dumiorg/coursehouse-common";
 import bcrypt from "bcrypt";
+import { Router } from "express";
+import asyncHandler from "express-async-handler";
+import { body } from "express-validator";
 import jwt from "jsonwebtoken";
 import { createTokenPayload } from "../helpers";
+import { UsersRepository } from "../repositories/users.repository";
 
 const router = Router();
 
@@ -18,7 +17,7 @@ router.post(
   asyncHandler(async (req, res) => {
     const { email, password } = req.body;
 
-    const user = await prisma.user.findFirst({ where: { email } });
+    const user = await UsersRepository.findByEmail(email);
 
     if (!user) {
       throw new HttpException(400, "Bad credentials");
@@ -31,7 +30,7 @@ router.post(
     }
 
     const token = jwt.sign(createTokenPayload(user), process.env.JWT_SECRET!, {
-      expiresIn: "1h",
+      expiresIn: process.env.JWT_EXPIRATION_TIME,
     });
 
     res.send({ token });
