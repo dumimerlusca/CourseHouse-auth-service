@@ -7,9 +7,9 @@
     "start": "node dist/index.js",
     "dev": "dotenv -e .env.dev -- nodemon src/index.ts",
     "build": "tsc",
-    "test:jest": "dotenv -e .env.test jest --watchAll --no-cache",
-    "test": "docker-compose -f docker/tests-docker-compose.yaml up -d && yarn test:jest",
-    "test-down": "docker-compose -f docker/tests-docker-compose.yaml down",
+    "test:init": "docker-compose -f docker/tests-docker-compose.yaml up -d",
+    "test:down": "docker-compose -f docker/tests-docker-compose.yaml down",
+    "test": "dotenv -e .env.test -- jest --watchAll --no-cache",
     "docker:build": "docker build -t dumimerlusca/auth-service ."
   },
   "keywords": [],
