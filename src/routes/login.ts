@@ -10,7 +10,7 @@ import { UsersRepository } from "../repositories/users.repository";
 const router = Router();
 
 router.post(
-  "/login",
+  "/api/auth/login",
   body("email").isString().notEmpty().isEmail(),
   body("password").isString().notEmpty(),
   checkValidation,

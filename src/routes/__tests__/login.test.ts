@@ -13,7 +13,7 @@ it("should throw error if passwords doesn't match", async () => {
   const email = "dumiasdasdasdagsdfsasddsfwt4@test.com";
 
   await request(app)
-    .post("/register")
+    .post("/api/auth/register")
     .send({ email, password: "123456", name: "Some name" });
 
   return makeRequest()
@@ -26,7 +26,7 @@ it("should login the user successfully", async () => {
   const password = "123456";
 
   await request(app)
-    .post("/register")
+    .post("/api/auth/register")
     .send({ email, password, name: "Some name" });
 
   const { body } = await makeRequest().send({ email, password }).expect(200);

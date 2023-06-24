@@ -9,7 +9,7 @@ import { UsersRepository } from "../repositories/users.repository";
 const router = Router();
 
 router.post(
-  "/register",
+  "/api/auth/register",
   body("email").notEmpty().isEmail(),
   body("password").notEmpty().isString(),
   body("name").notEmpty().isString(),

@@ -2,7 +2,7 @@ import request from "supertest";
 import { app } from "../../app";
 import { UsersRepository } from "../../repositories/users.repository";
 
-const makeRequest = () => request(app).post("/register");
+const makeRequest = () => request(app).post("/api/auth/register");
 
 it("should register a user successfully", async () => {
   const email = "dumiasdadsad@test.com";

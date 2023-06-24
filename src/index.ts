@@ -8,12 +8,15 @@ async function startServer() {
 
   await connectToDatabase();
 
-  app.listen(3001, async () => {
-    console.log("Auth service listening on port 3001");
+  app.listen(process.env.PORT, async () => {
+    console.log(`Auth service listening on port ${process.env.PORT}`);
   });
 }
 
 function checkEnv() {
+  if (!process.env.PORT) {
+    throw new Error("PORT missing!");
+  }
   if (!process.env.JWT_SECRET) {
     throw new Error("JWT_SECRET missing!");
   }
